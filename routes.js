@@ -2,16 +2,22 @@ const Twitter = require("twitter-lite");
 
 const appRouter = function(app) {
   app.get("/getAuthTokens", async (req, res) => {
+    if (!req.query.callback) {
+      res
+        .status(400)
+        .send({ error: "Forgot to include ?callback={url} in querystring" });
+    }
+
+    const callback_url = decodeURIComponent(req.query.callback);
+
     const client = new Twitter({
       consumer_key: process.env.CONSUMER_KEY,
       consumer_secret: process.env.CONSUMER_SECRET
     });
 
     client
-      .getRequestToken("https://chirpy-app.com/")
+      .getRequestToken(callback_url)
       .then(response => {
-        console.log("getAuthTokens");
-        console.log(response);
         res.status(200).send(response);
       })
       .catch(e => {
