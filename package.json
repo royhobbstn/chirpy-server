@@ -1,0 +1,21 @@
+{
+  "name": "chirpy-server",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "serverless-http": "^2.3.0",
+    "twitter-lite": "^0.9.4"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "devDependencies": {
+    "prettier": "^1.18.2"
+  }
+}

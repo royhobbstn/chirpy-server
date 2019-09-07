@@ -1,0 +1,36 @@
+# serverless.yml
+
+service: chirpy-app
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  stage: dev
+  region: us-west-2
+  timeout: 5
+
+functions:
+  app:
+    handler: index.handler
+    environment:
+      CONSUMER_KEY: ${opt:consumer_key}
+      CONSUMER_SECRET: ${opt:consumer_secret}
+    events:
+      - http:
+          path: getAuthTokens
+          method: get
+          cors: true
+      - http:
+          path: getAccessTokens
+          method: post
+          cors: true
+      - http:
+          path: getData
+          method: post
+          cors: true
+
+package:
+  exclude:
+    - jsonfile.json
+    - .idea/**
+    - notex.txt
