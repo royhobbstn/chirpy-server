@@ -8,7 +8,7 @@ const appRouter = function(app) {
     });
 
     client
-      .getRequestToken("https://www.chirpy-app.com/")
+      .getRequestToken("https://chirpy-app.com/")
       .then(response => {
         console.log("getAuthTokens");
         console.log(response);
