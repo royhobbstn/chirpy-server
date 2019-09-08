@@ -33,4 +33,4 @@ package:
   exclude:
     - jsonfile.json
     - .idea/**
-    - notex.txt
+    - notes.txt
