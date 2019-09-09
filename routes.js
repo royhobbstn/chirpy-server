@@ -54,8 +54,6 @@ const appRouter = function(app) {
   });
 
   app.post("/getData", async (req, res) => {
-    const logExcluded = false;
-
     const client = new Twitter({
       consumer_key: process.env.CONSUMER_KEY,
       consumer_secret: process.env.CONSUMER_SECRET,
@@ -68,36 +66,25 @@ const appRouter = function(app) {
       .then(response => {
         const json = response
           .filter(tweet => {
-            const hasLink =
-              tweet.full_text.includes("https") && tweet.entities.urls[0];
-            if (!hasLink && logExcluded) {
-              console.log(`EXCLUDED - NO LINKS: ${tweet.full_text}`);
-            }
-            return hasLink;
+            // only include links with tweets
+            return tweet.full_text.includes("https") && tweet.entities.urls[0];
           })
           .filter(tweet => {
+            // exclude post if links to other twitter content
             const isTwitterLink =
               tweet.entities.urls[0] &&
               tweet.entities.urls[0].expanded_url.includes("twitter.com");
-            if (isTwitterLink && logExcluded) {
-              console.log(
-                `EXCLUDED - TWITTER INTERNAL LINK: ${tweet.full_text} ${tweet.entities.urls[0].expanded_url}`
-              );
-            }
             return !isTwitterLink;
           })
           .filter(tweet => {
-            const isTwitterLink =
+            // exclude post if contains an instagram link
+            const isInstagramLink =
               tweet.entities.urls[0] &&
               tweet.entities.urls[0].expanded_url.includes("instagram.com");
-            if (isTwitterLink && logExcluded) {
-              console.log(
-                `EXCLUDED - INSTAGRAM LINK: ${tweet.full_text} ${tweet.entities.urls[0].expanded_url}`
-              );
-            }
-            return !isTwitterLink;
+            return !isInstagramLink;
           })
           .map(tweet => {
+            // format into something a bit more useful to frontend
             return {
               id_str: tweet.id_str,
               full_text: tweet.full_text,
